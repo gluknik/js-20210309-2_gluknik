@@ -1,13 +1,13 @@
 export default class SortableList {
   onPonterDownDelete = (event) => {
     if (event.target.dataset.deleteHandle !== undefined) {
-      this.deleteHandler(event.target.parentNode);
+      this.deleteHandler(event.target.closest('li'));
     }
   }
 
   onPointerDown = (event) => {
     if (event.target.dataset.grabHandle !== undefined) {
-      this.dragHandler(event, event.target.parentNode);
+      this.dragHandler(event, event.target.closest('li'));
     }
   }
 
@@ -46,7 +46,6 @@ export default class SortableList {
     this.element.append(draggableElement);
 
     moveAt(event.pageX, event.pageY);
-    
     function moveAt(pageX, pageY) {
       draggableElement.style.left = pageX - shiftX + 'px';
       draggableElement.style.top = pageY - shiftY + 'px';
@@ -124,6 +123,7 @@ export default class SortableList {
 
   destroy() {
     this.remove();
-    // NOTE: удаляем обработчики событий, если они есть
+    this.element.removeEventListener('pointerdown', this.onPonterDownDelete);
+    this.element.removeEventListener('pointerdown', this.onPointerDown);
   }
 }
