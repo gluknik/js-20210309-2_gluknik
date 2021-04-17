@@ -1,11 +1,11 @@
 export default class SortableList {
-  onClick = (event) => {
+  onPonterDownDelete = (event) => {
     if (event.target.dataset.deleteHandle !== undefined) {
       this.deleteHandler(event.target.parentNode);
     }
   }
 
-  onMouseDown = (event) => {
+  onPointerDown = (event) => {
     if (event.target.dataset.grabHandle !== undefined) {
       this.dragHandler(event, event.target.parentNode);
     }
@@ -55,7 +55,7 @@ export default class SortableList {
     let currentDroppable = item;
     let wasMouseMove = false;
 
-    function onMouseMove(event) {
+    function onPointerMove(event) {
       wasMouseMove = true;
       moveAt(event.pageX, event.pageY);
 
@@ -94,12 +94,13 @@ export default class SortableList {
       }
     }
 
-    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('pointermove', onPointerMove);
 
 
-    draggableElement.onmouseup = function() {
-      document.removeEventListener('mousemove', onMouseMove);
-      draggableElement.onmouseup = null;
+    draggableElement.onpointerup = function() {
+      document.removeEventListener('pointermove', onPointerMove);
+      draggableElement.onpointerup = null;
+      
       currentDroppable.parentNode.replaceChild(draggableElement, currentDroppable);
       draggableElement.classList.remove('sortable-list__item_dragging');
       draggableElement.style.left = 'auto';
@@ -113,8 +114,8 @@ export default class SortableList {
   }
 
   initEventListeners () {
-    this.element.addEventListener('click', this.onClick);
-    this.element.addEventListener('mousedown', this.onMouseDown);
+    this.element.addEventListener('pointerdown', this.onPonterDownDelete);
+    this.element.addEventListener('pointerdown', this.onPointerDown);
   }
 
   remove () {
